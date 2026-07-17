@@ -61,7 +61,7 @@ Query the database for latest NAV values:
 ```python
 import sqlite3
 
-conn = sqlite3.connect('/Users/wyl/.hermes/fund-advisor/data/fund_system.db')
+conn = sqlite3.connect('~/.hermes/fund-advisor/data/fund_system.db')
 cursor = conn.cursor()
 
 # Get latest NAV for each fund
@@ -120,7 +120,7 @@ Update the `holdings` table with corrected share counts:
 ```python
 import sqlite3
 
-conn = sqlite3.connect('/Users/wyl/.hermes/fund-advisor/data/fund_system.db')
+conn = sqlite3.connect('~/.hermes/fund-advisor/data/fund_system.db')
 cursor = conn.cursor()
 
 corrected_shares = {

@@ -219,7 +219,7 @@ import sqlite3
 from datetime import datetime
 
 # 数据库路径
-DB_PATH = "/Users/wyl/.hermes/fund-advisor/data/fund_system.db"
+DB_PATH = "~/.hermes/fund-advisor/data/fund_system.db"
 
 # 行业分类关键词
 INDUSTRY_KEYWORDS = {

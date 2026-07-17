@@ -18,16 +18,16 @@ python3 app.py &        # manual start with new code
 
 **Option B — Launchctl reload** (clean, recommended):
 ```bash
-launchctl bootout gui/$(id -u)/com.hermes.fund-dashboard 2>/dev/null
+launchctl bootout gui/$(id -u)/com.your-org.fund-dashboard 2>/dev/null
 sleep 1
-launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.hermes.fund-dashboard.plist
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.your-org.fund-dashboard.plist
 ```
 
 ### Verify after restart:
 ```bash
 curl -s localhost:8787/health                     # → {"status":"ok",...}
 curl -s localhost:8787/api/data | python3 -c "import sys,json; d=json.load(sys.stdin); print('holdings:', len(d.get('holdings',[])), '| modules:', list(d.keys()))"
-curl -s https://invest.aibaobao.online/health     # tunnel check
+curl -s https://invest.your-domain.com/health     # tunnel check
 ```
 
 ## Common Deployment Errors

@@ -122,7 +122,7 @@ python3 scripts/sync_holdings.py '<json>'   # Batch sync holdings from screensho
 
 64. **Code-block tables with emoji shift columns** — Prepending 📅 to fund names in holdings tables breaks alignment because terminals render emoji as width-2 but code counts them as width-1. Keep DCA indicators in a separate section below the table, not prepended to row data.
 
-65. **Gateway blocks launchctl/kill from inside Hermes** — Running `launchctl unload ~/Library/LaunchAgents/com.hermes.fund-dashboard.plist` or `kill $(lsof -ti :8787)` from inside the Hermes gateway fails with:
+65. **Gateway blocks launchctl/kill from inside Hermes** — Running `launchctl unload ~/Library/LaunchAgents/com.your-org.fund-dashboard.plist` or `kill $(lsof -ti :8787)` from inside the Hermes gateway fails with:
     ```
     Blocked: cannot restart or stop the gateway from inside the gateway process.
     ```
@@ -132,11 +132,11 @@ python3 scripts/sync_holdings.py '<json>'   # Batch sync holdings from screensho
     **Workaround**: Write a shell script to `/tmp/` and run it:
     ```bash
     # /tmp/restart-dashboard.sh
-    launchctl unload ~/Library/LaunchAgents/com.hermes.fund-dashboard.plist 2>/dev/null
+    launchctl unload ~/Library/LaunchAgents/com.your-org.fund-dashboard.plist 2>/dev/null
     sleep 2
     kill -9 $(lsof -ti :8787) 2>/dev/null
     sleep 2
-    launchctl load ~/Library/LaunchAgents/com.hermes.fund-dashboard.plist 2>/dev/null
+    launchctl load ~/Library/LaunchAgents/com.your-org.fund-dashboard.plist 2>/dev/null
     sleep 5
     curl -s http://localhost:8787/health
     ```

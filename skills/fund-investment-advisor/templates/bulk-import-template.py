@@ -66,5 +66,5 @@ def import_holdings(db_path, holdings_data):
 
 
 if __name__ == "__main__":
-    db_path = "/Users/wyl/.hermes/fund-advisor/data/fund_system.db"
+    db_path = "~/.hermes/fund-advisor/data/fund_system.db"
     import_holdings(db_path, FUND_HOLDINGS)

@@ -153,7 +153,7 @@ When `fund_categorizer.py` config changes, sync this inline dict.
 6. **Rate limiting**: Multiple curl calls per page load (~15-20) on every refresh. The 5-minute auto-refresh cadence is generous enough for eastmoney/sina, but keep an eye on connection latency. If page load becomes slow, consider caching market data for 60s.
 7. **CPI data source: use macro_china_cpi() not macro_china_cpi_yearly()** — The yearly variant (`ak.macro_china_cpi_yearly()`) returns data stuck at 2025-08 with 0.0% CPI. The correct source is `ak.macro_china_cpi()` which returns monthly data and is current (e.g., 2026-06 with 1.0%). When CPI=0.0 appears on the dashboard, it's always this stale-data bug, not actual zero inflation.
 8. **JS field name must match backend JSON key exactly** — When adding new frontend modules that consume `/api/data` JSON, the JavaScript field name MUST exactly match the Python dict key returned by `build_dashboard_data()`. Mismatch example: JS used `d.impact` but backend returned `d.impact_pct` → rendered as `undefined%`. Fix: grep both Python return dict keys and JS property accesses to confirm alignment before deploying.
-9. **LaunchAgent KeepAlive re-spawns old code after manual kill** — When restarting via `kill $(lsof -ti :8787)`, the LaunchAgent's `KeepAlive=true` immediately restarts the process using the OLD `app.py` (still loaded in memory from the original launchd spawn). You must kill TWICE: first kill drops the manual process, launchd spawns the old code; second kill gets the launchd-spawned copy. Or use `launchctl bootout gui/$(id -u)/com.hermes.fund-dashboard 2>/dev/null; launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.hermes.fund-dashboard.plist` for clean restart.
+9. **LaunchAgent KeepAlive re-spawns old code after manual kill** — When restarting via `kill $(lsof -ti :8787)`, the LaunchAgent's `KeepAlive=true` immediately restarts the process using the OLD `app.py` (still loaded in memory from the original launchd spawn). You must kill TWICE: first kill drops the manual process, launchd spawns the old code; second kill gets the launchd-spawned copy. Or use `launchctl bootout gui/$(id -u)/com.your-org.fund-dashboard 2>/dev/null; launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.your-org.fund-dashboard.plist` for clean restart.
 
 ## Dashboard Layout
 
@@ -216,7 +216,7 @@ cd ~/.hermes/fund-advisor/dashboard && python3 app.py
 ```
 
 ### LaunchAgent (Auto-Start / Crash Recovery)
-Plist at `~/Library/LaunchAgents/com.hermes.fund-dashboard.plist`:
+Plist at `~/Library/LaunchAgents/com.your-org.fund-dashboard.plist`:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -225,14 +225,14 @@ Plist at `~/Library/LaunchAgents/com.hermes.fund-dashboard.plist`:
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>com.hermes.fund-dashboard</string>
+    <string>com.your-org.fund-dashboard</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/Users/wyl/.hermes/fund-advisor/venv/bin/python3</string>
-        <string>/Users/wyl/.hermes/fund-advisor/dashboard/app.py</string>
+        <string>~/.hermes/fund-advisor/venv/bin/python3</string>
+        <string>~/.hermes/fund-advisor/dashboard/app.py</string>
     </array>
     <key>WorkingDirectory</key>
-    <string>/Users/wyl/.hermes/fund-advisor/dashboard</string>
+    <string>~/.hermes/fund-advisor/dashboard</string>
     <key>KeepAlive</key>
     <true/>
     <key>RunAtLoad</key>
@@ -253,13 +253,13 @@ Plist at `~/Library/LaunchAgents/com.hermes.fund-dashboard.plist`:
 **Commands:**
 ```bash
 # Load / start
-launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.hermes.fund-dashboard.plist
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.your-org.fund-dashboard.plist
 
 # Unload / stop
-launchctl bootout gui/$(id -u)/com.hermes.fund-dashboard 2>/dev/null
+launchctl bootout gui/$(id -u)/com.your-org.fund-dashboard 2>/dev/null
 
 # Check status
-launchctl list com.hermes.fund-dashboard
+launchctl list com.your-org.fund-dashboard
 
 # View logs
 tail -f /tmp/fund-dashboard.log
@@ -272,22 +272,22 @@ Use existing tunnel config (`~/.cloudflared/config.yaml`) to route a subdomain:
 
 ```yaml
 tunnel: <tunnel-uuid>
-credentials-file: /Users/wyl/.cloudflared/<tunnel-uuid>.json
+credentials-file: ~/.cloudflared/<tunnel-uuid>.json
 ingress:
-  - hostname: invest.aibaobao.online
+  - hostname: invest.your-domain.com
     service: http://localhost:8787
-  - hostname: aibaobao.online
+  - hostname: your-domain.com
     service: http://localhost:3008
   - service: http_status:404
 ```
 
-**DNS**: Add CNAME record `invest.aibaobao.online → <tunnel-uuid>.cfargotunnel.com`
+**DNS**: Add CNAME record `invest.your-domain.com → <tunnel-uuid>.cfargotunnel.com`
 
 **Restart tunnel** after config change:
 ```bash
 hermes gateway restart
 # Or directly:
-launchctl kickstart gui/$(id -u)/com.hermes.cloudflared 2>/dev/null
+launchctl kickstart gui/$(id -u)/com.your-org.cloudflared 2>/dev/null
 ```
 
 ## Key Technical Details

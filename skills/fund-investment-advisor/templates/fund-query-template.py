@@ -154,7 +154,7 @@ class FundQueryTool:
 
 def main():
     """主函数"""
-    db_path = "/Users/wyl/.hermes/fund-advisor/data/fund_system.db"
+    db_path = "~/.hermes/fund-advisor/data/fund_system.db"
     tool = FundQueryTool(db_path)
     
     print("=" * 80)

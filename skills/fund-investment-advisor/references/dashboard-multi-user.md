@@ -194,4 +194,4 @@ No dependency changes from v2 (flask, plotly). Just restart:
 kill $(lsof -ti :8787) && cd ~/.hermes/fund-advisor/dashboard && python3 app.py
 ```
 
-First run auto-creates `admin` user with password `admin123`. Always change password after first login.
+First run auto-creates `admin` user with password `<change-me>`. Always change password after first login.

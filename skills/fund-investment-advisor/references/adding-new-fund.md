@@ -105,7 +105,7 @@ Update user profile: "用户当前持有 N 只基金..."
 ### 10. Verification
 ```bash
 /opt/homebrew/bin/python3 -c "
-import sys; sys.path.insert(0, '/Users/wyl/.hermes/fund-advisor/scripts')
+import sys; sys.path.insert(0, '~/.hermes/fund-advisor/scripts')
 from adaptive_risk_v2 import AdaptiveRiskEngine
 e = AdaptiveRiskEngine()
 print(e.FUND_THEME_MAP.get('257070'))

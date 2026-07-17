@@ -27,7 +27,7 @@ print(ssl.OPENSSL_VERSION)  # Shows: LibreSSL 2.8.3
 ### 2. Verify network works
 ```bash
 curl -v https://fund.eastmoney.com/  # Should work
-ping 39.173.155.71  # Should respond
+ping <eastmoney-server-ip>  # Should respond
 ```
 
 If `curl` works but Python fails, it's a library issue, not network.
